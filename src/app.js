@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const db = require('./db');
-const signup = require('./signup');
+const db = require('../models/db');
+const signup = require('../API/signUp');
 
 app.use(express.json());
 

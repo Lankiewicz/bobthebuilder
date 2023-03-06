@@ -1,9 +1,9 @@
-require('dotenv').config();
+require('dotenv').config({path: '../.env'});
 
 const mysql = require('mysql2');
 
-const connection = mysql.createConnection(process.env.DATABASE_URL)
-console.log('Connected to PlanetScale!')
+const connection = mysql.createConnection(process.env.DATABASE_URL);
+console.log('Connected to PlanetScale!');
 
 connection.query("Show tables like 'USERS'", function(err, results) {
     if (err) {
@@ -28,4 +28,4 @@ connection.query(
     }
 });
 
-module.exports = connection;
+module.exports = connection; 

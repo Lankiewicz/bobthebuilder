@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const connection = require('./db');
+const connection = require('../models/db');
+
 const session = require('express-session');
 
 //Konfiguracja sesji
@@ -38,15 +39,21 @@ function verifyToken(req, res, next) {
 // Walidacja adresu email
 function validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+if(!emailRegex.test(email)) {
+    res.status(400).send('Błędny adres email');
+    return;
+}
+return true;
 }
 
 // Walidacja hasła
 function validatePassword(password) {
    if(!password) {
+    res.status(400).send('Błędne hasło');
          return false;
     }
     if(password.length < 8) {
+        res.status(400).send('Błędne hasło');
         return false;
     }
     return true;
@@ -70,6 +77,7 @@ app.post('/signup', (req, res) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) {
             console.log(err);
+            res.status(500).send('Błąd hashowania hasła');
             return;
         }
 
@@ -79,7 +87,7 @@ app.post('/signup', (req, res) => {
             (err, result) => {
                 if (err) {
                     console.log(err);
-                    res.status(500).send('Error adding user');
+                    res.status(500).send('Error adding user');            
                     return;
                 }
                 console.log('User added');
@@ -87,11 +95,10 @@ app.post('/signup', (req, res) => {
                 const token = jwt.sign(user, secretKey);
                 req.session.token = token;
                 res.status(201).json({ token });
-                res.status(201).json({ token });
+                return;
             }
         );
-    }
-    );
+    });
 });
 
 //Endpoint zabezpieczony tokenem
@@ -100,3 +107,4 @@ app.get('/protected', verifyToken, (req, res) => {
 });
 
 module.exports = app;
+ 
