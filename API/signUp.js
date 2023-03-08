@@ -13,7 +13,6 @@ app.use(session({
     saveUninitialized: true,
 }));  
 
-
 app.use(cors());
 app.use(express.json());
 
@@ -39,46 +38,31 @@ function verifyToken(req, res, next) {
 // Walidacja adresu email
 function validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-if(!emailRegex.test(email)) {
-    res.status(400).send('Błędny adres email');
-    return;
-}
-return true;
+return emailRegex.test(email);
 }
 
 // Walidacja hasła
 function validatePassword(password) {
-   if(!password) {
-    res.status(400).send('Błędne hasło');
-         return false;
-    }
-    if(password.length < 8) {
-        res.status(400).send('Błędne hasło');
-        return false;
-    }
-    return true;
+  return password && password.length >= 8;
 }
-
+   
 // Endpoint API POST do dodawania użytkowników
 app.post('/signup', (req, res) => {
     const {email, password } = req.body;
     const saltRounds = 10;
 
     if(!validateEmail(email)) {
-        res.status(400).send('Błędny adres email');
-        return;
+        return res.status(400).send('Błędny adres email');
     }
     if(!validatePassword(password)) {
-        res.status(400).send('Błędne hasło');
-        return;
+        return res.status(400).send('Błędne hasło');
     }
 
     // Hashowanie hasła za pomocą biblioteki bcrypt.js
     bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) {
             console.log(err);
-            res.status(500).send('Błąd hashowania hasła');
-            return;
+            return res.status(500).send('Wewnętrzny błąd serwera');
         }
 
         connection.query(
@@ -87,15 +71,13 @@ app.post('/signup', (req, res) => {
             (err, result) => {
                 if (err) {
                     console.log(err);
-                    res.status(500).send('Error adding user');            
-                    return;
+                    return res.status(500).send('Wewnętrzny błąd serwera');
                 }
                 console.log('User added');
                 const user = { email };
                 const token = jwt.sign(user, secretKey);
                 req.session.token = token;
                 res.status(201).json({ token });
-                return;
             }
         );
     });

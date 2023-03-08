@@ -1,9 +1,17 @@
 require('dotenv').config({path: '../.env'});
+const mysql = require('mysql');
 
-const mysql = require('mysql2');
 
-const connection = mysql.createConnection(process.env.DATABASE_URL);
-console.log('Connected to PlanetScale!');
+const connection = mysql.createConnection({
+    host: 'eu-central.connect.psdb.cloud',
+    user: 'p5njy22wgb3kx1x5inbs',
+    password: 'pscale_pw_EOPt2klmUnAlLXbypa7T6zv7wU1F8Lz3jsyuHMkq1RN',
+    database: 'bobmanager',
+    ssl: {
+        rejectUnauthorized: true
+    }
+});
+
 
 connection.query("Show tables like 'USERS'", function(err, results) {
     if (err) {
@@ -27,5 +35,6 @@ connection.query(
         console.log('Table Users created');    
     }
 });
+
 
 module.exports = connection; 

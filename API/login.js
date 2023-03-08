@@ -1,5 +1,5 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const connection = require('../models/db');
@@ -7,14 +7,14 @@ const connection = require('../models/db');
 const session = require('express-session');
 
 //Konfiguracja sesji
-app.use(session({
+router.use(session({
     secret: 'mysecretkey',
     resave: false,
     saveUninitialized: true,
 }));
 
-app.use(cors());
-app.use(express.json());
+router.use(cors());
+router.use(express.json());
 
 const jwt = require('jsonwebtoken');
 const secretKey = 'mysecretkey';
@@ -59,7 +59,7 @@ function validatePassword(password) {
     }
 
 // Endpoint POST do logowania
-app.post('/login', (req, res) => {
+router.post('/auth', (req, res) => {
     const {email, password} = req.body;
     
     if(!email || !password) {
@@ -72,7 +72,7 @@ app.post('/login', (req, res) => {
     (err, results) => {
         if(err) {
             console.log(err);
-            res.status(500).json({error: 'image.png'});
+            res.status(500).json({error: 'Wewnętrzny błąd serwera'});
             return;
         }
 
@@ -93,11 +93,11 @@ app.post('/login', (req, res) => {
                     res.status(401).json({error: 'Błędny adres email lub hasło'});
                     return;
                 }
-
-                res.status(200).json({message: 'Zalogowano pomyślnie'});
+                const token = jwt.sign({id: user.id}, secretKey, {expiresIn: '1h'});
+                req.session.token = token;
+                res.status(200).json({token: token});
             });
         });
     });
 
-module.exports = app;
-
+module.exports = router;
