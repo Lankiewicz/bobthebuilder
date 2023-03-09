@@ -13,7 +13,7 @@ class GetUsersCall {
   static Future<ApiCallResponse> call() {
     return ApiManager.instance.makeApiCall(
       callName: 'getUsers',
-      apiUrl: 'http://localhost:3000/users',
+      apiUrl: 'http://localhost:3019/users',
       callType: ApiCallType.GET,
       headers: {
         'Content-Type': 'application/json',
@@ -41,7 +41,35 @@ class SetUserCall {
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'setUser',
-      apiUrl: 'http://localhost:3000/signup',
+      apiUrl: 'http://localhost:3019/signup',
+      callType: ApiCallType.POST,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      params: {},
+      body: body,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+}
+
+class SetLoginCall {
+  static Future<ApiCallResponse> call({
+    String? email = '',
+    String? password = '',
+  }) {
+    final body = '''
+{
+  "email": "${email}",
+  "password": "${password}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'setLogin',
+      apiUrl: 'http://localhost:3019/auth',
       callType: ApiCallType.POST,
       headers: {
         'Content-Type': 'application/json',

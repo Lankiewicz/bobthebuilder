@@ -5,18 +5,18 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'signup_model.dart';
-export 'signup_model.dart';
+import 'login_model.dart';
+export 'login_model.dart';
 
-class SignupWidget extends StatefulWidget {
-  const SignupWidget({Key? key}) : super(key: key);
+class LoginWidget extends StatefulWidget {
+  const LoginWidget({Key? key}) : super(key: key);
 
   @override
-  _SignupWidgetState createState() => _SignupWidgetState();
+  _LoginWidgetState createState() => _LoginWidgetState();
 }
 
-class _SignupWidgetState extends State<SignupWidget> {
-  late SignupModel _model;
+class _LoginWidgetState extends State<LoginWidget> {
+  late LoginModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
@@ -24,7 +24,7 @@ class _SignupWidgetState extends State<SignupWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SignupModel());
+    _model = createModel(context, () => LoginModel());
 
     _model.emailAddressController ??= TextEditingController();
     _model.passwordController ??= TextEditingController();
@@ -48,7 +48,6 @@ class _SignupWidgetState extends State<SignupWidget> {
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
@@ -85,7 +84,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
                       child: Text(
-                        'Zaczynamy.',
+                        'Witaj ponownie!',
                         style: FlutterFlowTheme.of(context).title1,
                       ),
                     ),
@@ -93,7 +92,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 5.0),
                       child: Text(
-                        'Użyj formularza, żeby się zarejestrować.',
+                        'Użyj formularza, żeby się zalogować do konta.',
                         style: FlutterFlowTheme.of(context).bodyText2,
                       ),
                     ),
@@ -115,7 +114,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                                   labelText: 'Adres Email',
                                   labelStyle:
                                       FlutterFlowTheme.of(context).bodyText2,
-                                  hintText: 'Wpisz swój email tutaj...',
+                                  hintText: 'Wpisz swój email tutaj..',
                                   hintStyle:
                                       FlutterFlowTheme.of(context).bodyText2,
                                   enabledBorder: OutlineInputBorder(
@@ -180,7 +179,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                                 labelText: 'Hasło',
                                 labelStyle:
                                     FlutterFlowTheme.of(context).bodyText2,
-                                hintText: 'Wpisz swoje hasło tutaj..',
+                                hintText: 'Wpisz swoje hasło tutaj...',
                                 hintStyle:
                                     FlutterFlowTheme.of(context).bodyText2,
                                 enabledBorder: OutlineInputBorder(
@@ -246,21 +245,41 @@ class _SignupWidgetState extends State<SignupWidget> {
                           EdgeInsetsDirectional.fromSTEB(0.0, 28.0, 0.0, 0.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           FFButtonWidget(
+                            onPressed: () {
+                              print('Button-ForgotPassword pressed ...');
+                            },
+                            text: 'Nie pamiętasz hasła?',
+                            options: FFButtonOptions(
+                              width: 170.0,
+                              height: 40.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: Color(0x00FFFFFF),
+                              textStyle: FlutterFlowTheme.of(context).bodyText2,
+                              elevation: 0.0,
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 1.0,
+                              ),
+                            ),
+                          ),
+                          FFButtonWidget(
                             onPressed: () async {
-                              _model.apiResultc7t = await SetUserCall.call(
+                              _model.apiResultkzt = await SetLoginCall.call(
                                 email: _model.emailAddressController.text,
                                 password: _model.passwordController.text,
-                                name: _model.emailAddressController.text,
                               );
 
                               setState(() {});
                             },
-                            text: 'Utwórz konto',
+                            text: 'Zaloguj się',
                             options: FFButtonOptions(
-                              width: 190.0,
+                              width: 130.0,
                               height: 50.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
@@ -291,25 +310,16 @@ class _SignupWidgetState extends State<SignupWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Masz już utworzone konto?',
+                            'Nie masz konta?',
                             style: FlutterFlowTheme.of(context).bodyText1,
                           ),
                           FFButtonWidget(
-                            onPressed: () async {
-                              context.pushNamed(
-                                'login',
-                                extra: <String, dynamic>{
-                                  kTransitionInfoKey: TransitionInfo(
-                                    hasTransition: true,
-                                    transitionType:
-                                        PageTransitionType.bottomToTop,
-                                  ),
-                                },
-                              );
+                            onPressed: () {
+                              print('Button pressed ...');
                             },
-                            text: 'Zaloguj się',
+                            text: 'Stwórz konto',
                             options: FFButtonOptions(
-                              width: 120.0,
+                              width: 150.0,
                               height: 30.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
