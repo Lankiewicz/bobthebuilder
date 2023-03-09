@@ -30,8 +30,6 @@
 .pub-cache/
 .pub/
 /build/
-node_modules
-.env
 
 # Firebase – this is necessary if you use Firebase since it could otherwise 
 # lead to leaking of private certificates to your repository, which is no bueno.
